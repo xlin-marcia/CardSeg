@@ -32,6 +32,7 @@ CardSeg/
 Install the package and download pretrained checkpoints:
 
 ```bash
+cd sam2_repo
 pip install -e .
 cd checkpoints && ./download_ckpts.sh && cd ..
 ```
