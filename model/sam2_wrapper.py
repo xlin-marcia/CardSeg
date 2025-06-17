@@ -2,6 +2,8 @@ import os
 import torch
 import torch.nn as nn
 from omegaconf import OmegaConf
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from sam2_repo.sam2.build_sam import build_sam2
 from sam2_repo.sam2.utils.transforms import SAM2Transforms
@@ -11,13 +13,13 @@ from model.modules.anatomy import AnatomyPriorModule
 
 # Tested, works as expected
 class SAM2Wrapper(nn.Module):
-    def __init__(self, config_file, ckpt_path=None, device="cuda"):
+    def __init__(self, config_file, ckpt_path=None, device=None):
         super().__init__()
         self.config_file = config_file
         self.config = self._load_config()
 
         self.ckpt_path = self.config.ckpt_path
-        self.device = self.config.device
+        self.device = device if device is not None else self.config.device
 
         # need to set this when finish lora
         self.lora_hook = None
@@ -216,15 +218,15 @@ class SAM2Wrapper(nn.Module):
 
         return self.anatomy_module(features_dict)
 
-        def register_lora_hook(self, lora_hook):
-            """
-            Register a LoRA module or patching function.
-            It should either modify self.model or return modified outputs.
-            """
-            self.lora_hook = lora_hook
-            print("[LoRA] LoRA hook successfully registered.")
+    def register_lora_hook(self, lora_hook):
+        """
+        Register a LoRA module or patching function.
+        It should either modify self.model or return modified outputs.
+        """
+        self.lora_hook = lora_hook
+        print("[LoRA] LoRA hook successfully registered.")
 
 
-        def get_config(self):
-            """Expose config if needed for logging or analysis"""
-            return self.config
+    def get_config(self):
+        """Expose config if needed for logging or analysis"""
+        return self.config
