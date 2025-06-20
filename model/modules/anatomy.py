@@ -22,7 +22,7 @@ class SelfUpdateBlock(nn.Module):
 
         x_flat = x.flatten(2).transpose(1, 2)  # (B, HW, C)
         attn_out, _ = self.attn(x_flat, x_flat, x_flat)
-        out = self.norm(attn_out + x_flat).transpose(1, 2).view(B, C, H, W)
+        out = self.norm(attn_out + x_flat).transpose(1, 2).view(B, self.hidden_dim, H, W)
         return out
 
 
@@ -137,7 +137,7 @@ class AnatomyPriorModule(nn.Module):
             _, enhanced_feat = module(mean_prior, feat)
 
             # only to check if the module is working correctly, delete in production
-            print(f"[AnatomyPriorModule] Applied anatomy prior to feature level {i}, input shape: {feat.shape}, output shape: {enhanced_feat.shape}")
+            # print(f"[AnatomyPriorModule] Applied anatomy prior to feature level {i}, input shape: {feat.shape}, output shape: {enhanced_feat.shape}")
             
             enhanced_feats.append(enhanced_feat)
 
