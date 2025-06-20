@@ -51,7 +51,7 @@ def test_ap_block_shapes(in_channels, ap_block):
 
 
 @pytest.mark.parametrize("hidden_dim", [256, 64])
-def test_ap_module(hidden_dim, ap_module):
+def test_ap_module_shapes(hidden_dim, ap_module):
     backbone_fpn = [
         torch.randn(2, hidden_dim, 64, 64),
         torch.randn(2, hidden_dim, 32, 32),
